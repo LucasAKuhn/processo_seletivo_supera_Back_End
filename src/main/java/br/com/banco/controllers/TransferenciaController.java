@@ -1,13 +1,13 @@
 package br.com.banco.controllers;
 
 
-import br.com.banco.entities.Conta;
 import br.com.banco.entities.Transferencia;
-import br.com.banco.repositories.ContaRepository;
 import br.com.banco.repositories.TransferenciaRepository;
+import br.com.banco.service.TransferenciaService;
 import br.com.banco.service.imp.TransferenciaServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,9 @@ public class TransferenciaController {
 
     @Autowired
     TransferenciaServiceImp transferenciaServiceImp;
+
+    @Autowired
+    TransferenciaService transferenciaService;
 
 
 
@@ -50,9 +53,15 @@ public class TransferenciaController {
         return result;
     }
 
+    @GetMapping("/byTempo")
+    public ResponseEntity obterTransferenciasPorParametroDeDatas(@Param("startDate") String startDate,
+                                                                 @Param("endDate") String endDate){
+
+        return ResponseEntity.ok().body(transferenciaServiceImp.obterTransferenciasPorData(startDate, endDate));
+    }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody Transferencia transferencia) {
+    public ResponseEntity inserirNovaTransferencia(@RequestBody Transferencia transferencia) {
         Transferencia entidade = transferencia;
         entidade = transferenciaRepository.save(entidade);
         return ResponseEntity.ok(entidade);

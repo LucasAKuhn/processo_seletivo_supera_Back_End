@@ -1,8 +1,6 @@
 package br.com.banco.repositories;
 
-import br.com.banco.entities.Conta;
 import br.com.banco.entities.Transferencia;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +17,8 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
     //select * from transferencia where CONTA_ID = 1
     //select * from conta
 
-    @Query( value =
+
+    @Query(value =
             "select '*' " +
                     "from Transferencia tr  " +
                     "WHERE tr.conta_id = :conta_id "
@@ -29,9 +28,28 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
     Optional<Transferencia> findById(BigInteger id);
 
 
-    //"where conta_id = conta_id")
-//    List<Transferencia> obterTransferencia(
-//            @Param("id") Long conta_id
-//    );
+    //SELECT * FROMT transferencia WHERE data_transferencia BETWEEN 2019-01-01 12:00:00+03 and 2019-05-04 08:12:45+03
+    //BUSCA COM PARAMETRO DE DATAS
+//    @Query(value =
+//    "SELECT '*' " +
+//            "FROM Transferencia tr " +
+//            "WHERE tr.data_transferencia " +
+//            "BETWEEN :startDate " +
+//            "AND :endDate ")
+//    List<Transferencia> getTransferenciaPorIntervaloDeDatas(
+//            @Param("startDate")LocalDateTime startDate,
+//            @Param("endDate")LocalDateTime endDate
+//            );
+//
+//}
+
+
+    @Query(nativeQuery = true, value =
+            "SELECT * FROM " +
+                    " Transferencia tr " +
+                    "WHERE tr.data_transferencia " +
+                    "BETWEEN :startDate " +
+                    "AND :endDate ")
+    List<Transferencia> encontrarPorParametroDatas(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }

@@ -25,7 +25,7 @@ public class Transferencia {
 
     @CreationTimestamp
     @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
-    private LocalDateTime data_transferencia;
+    private LocalDateTime  data_transferencia;
 
     private double valor;
 
