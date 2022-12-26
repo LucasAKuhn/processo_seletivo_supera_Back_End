@@ -33,6 +33,7 @@ public class Transferencia {
 
     private String nome_operador_transacao;
 
-    //@ManyToOne
-    private int conta_id;
+    @ManyToOne
+    @JoinColumn(name = "conta_id")
+    private Conta conta_id;
 }

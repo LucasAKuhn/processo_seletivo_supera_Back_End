@@ -13,35 +13,10 @@ import java.util.Optional;
 @Repository
 public interface TransferenciaRepository extends JpaRepository<Transferencia, Long> {
 
-
-    //select * from transferencia where CONTA_ID = 1
-    //select * from conta
-
-
-    @Query(value =
-            "select '*' " +
-                    "from Transferencia tr  " +
-                    "WHERE tr.conta_id = :conta_id "
-    )
-    List<Transferencia> trazerTransferencias(@Param("conta_id") int conta_id);
-
     Optional<Transferencia> findById(BigInteger id);
 
-
-    //SELECT * FROMT transferencia WHERE data_transferencia BETWEEN 2019-01-01 12:00:00+03 and 2019-05-04 08:12:45+03
-    //BUSCA COM PARAMETRO DE DATAS
-//    @Query(value =
-//    "SELECT '*' " +
-//            "FROM Transferencia tr " +
-//            "WHERE tr.data_transferencia " +
-//            "BETWEEN :startDate " +
-//            "AND :endDate ")
-//    List<Transferencia> getTransferenciaPorIntervaloDeDatas(
-//            @Param("startDate")LocalDateTime startDate,
-//            @Param("endDate")LocalDateTime endDate
-//            );
-//
-//}
+    @Query(nativeQuery = true, value = "SELECT * FROM Transferencia WHERE conta_id = :id ")
+    List<Transferencia> findAllTransferencia(@Param("id") Long id);
 
 
     @Query(nativeQuery = true, value =
@@ -50,6 +25,24 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
                     "WHERE tr.data_transferencia " +
                     "BETWEEN :startDate " +
                     "AND :endDate ")
-    List<Transferencia> encontrarPorParametroDatas(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Transferencia> findByParametroDatas(@Param("startDate") String startDate, @Param("endDate") String endDate);
+
+
+    @Query(value =
+    "SELECT tr FROM " +
+            " Transferencia tr " +
+            "WHERE tr.nome_operador_transacao = :nomeOperador")
+    List<Transferencia> findByNomeOperador(@Param("nomeOperador") String nomeOperador);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM " +
+            " Transferencia  " +
+            "WHERE data_transferencia " +
+            "BETWEEN :startDate " +
+            "AND :endDate " +
+            "AND nome_operador_transacao = :nomeOperador")
+    List<Transferencia> findByDataENomeOperador(
+                                                @Param("startDate") String startDate,
+                                                @Param("endDate") String endDate,
+                                                @Param("nomeOperador") String nomeOperador);
 
 }
